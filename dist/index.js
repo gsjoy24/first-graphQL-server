@@ -1,31 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { db } from './db.js';
-const typeDefs = `
-  type Product {
-  id:ID!
-	name: String
-	image: String
-	description: String
-	price: Float
-	quantity: Int
-	onStock: Boolean
-	category: String
-  }
-
-  type Query {
-    products: [Product]
-    product(productId: ID!): Product
-  }
-`;
-const resolvers = {
-    Query: {
-        products: () => db.products,
-        product: (parent, args, context) => {
-            return db.products.find((product) => product.id === args.productId);
-        }
-    }
-};
+import { resolvers } from './gql/resolvers/index.js';
+import { typeDefs } from './gql/schemas/index.js';
 const server = new ApolloServer({
     typeDefs,
     resolvers
